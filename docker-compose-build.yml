@@ -9,8 +9,6 @@ services:
     depends_on:
       - signup
       - subscription
-      - signup-database
-      - subscription-database
     environment:
       - GW_PORT=${GW_PORT}
       - SIGNUP_HOST=${SIGNUP_HOST}
@@ -25,8 +23,6 @@ services:
         - fitflow-signup:latest
     ports:
       - "${SIGNUP_PORT}:${SIGNUP_PORT}"
-    depends_on:
-      - signup-database
     environment:
       - SIGNUP_HOST=${SIGNUP_HOST}
       - SIGNUP_PORT=${SIGNUP_PORT}
@@ -43,9 +39,6 @@ services:
         - fitflow-subscription:latest
     ports:
       - "${SUBSCRIPTION_PORT}:${SUBSCRIPTION_PORT}"
-    depends_on:
-      - signup
-      - subscription-database
     environment:
       - SIGNUP_HOST=${SIGNUP_HOST}
       - SIGNUP_PORT=${SIGNUP_PORT}
