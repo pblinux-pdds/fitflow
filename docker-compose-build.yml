@@ -1,8 +1,9 @@
 services:
   fitflow-gw:
-    build: ./fitflow-gw
-    tags:
-      - fitflow-gw:latest
+    build:
+      context: ./fitflow-gw
+      tags:
+        - fitflow-gw:latest
     ports:
       - "80:${GW_PORT}"
     depends_on:
@@ -18,9 +19,10 @@ services:
       - SUBSCRIPTION_PORT=${SUBSCRIPTION_PORT}
 
   signup:
-    build: ./fitflow-signup
-    tags:
-      - fitflow-signup:latest
+    build: 
+      context: ./fitflow-signup
+      tags:
+        - fitflow-signup:latest
     ports:
       - "${SIGNUP_PORT}:${SIGNUP_PORT}"
     depends_on:
@@ -35,9 +37,10 @@ services:
       - DB_NAME=${DB_SIGNUP_NAME}
 
   subscription:
-    build: ./fitflow-subscription
-    tags:
-      - fitflow-subscription:latest
+    build: 
+      context: ./fitflow-subscription
+      tags:
+        - fitflow-subscription:latest
     ports:
       - "${SUBSCRIPTION_PORT}:${SUBSCRIPTION_PORT}"
     depends_on:
