@@ -1,5 +1,5 @@
 services:
-  api-gateway:
+  gw:
     build: ./fitflow-gw
     tags:
       - fitflow-gw:latest
