@@ -1,5 +1,5 @@
 services:
-  gw:
+  fitflow-gw:
     build: ./fitflow-gw
     tags:
       - fitflow-gw:latest
