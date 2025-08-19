@@ -1,6 +1,8 @@
 services:
   api-gateway:
-    image: 539759801100.dkr.ecr.us-east-1.amazonaws.com/fitflow-gw:latest
+    build: ./fitflow-gw
+    tags:
+      - fitflow-gw:latest
     ports:
       - "80:${GW_PORT}"
     depends_on:
@@ -16,7 +18,9 @@ services:
       - SUBSCRIPTION_PORT=${SUBSCRIPTION_PORT}
 
   signup:
-    image: 539759801100.dkr.ecr.us-east-1.amazonaws.com/fitflow-signup:latest
+    build: ./fitflow-signup
+    tags:
+      - fitflow-signup:latest
     ports:
       - "${SIGNUP_PORT}:${SIGNUP_PORT}"
     depends_on:
@@ -30,19 +34,10 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_SIGNUP_NAME}
 
-  signup-database:
-    image: postgres
-    ports:
-      - "5433:${DB_PORT}"
-    volumes:
-      - "signup-database:/var/lib/postgresql/data"
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
-      - POSTGRES_DB=${DB_SIGNUP_NAME}
-
   subscription:
-    image: 539759801100.dkr.ecr.us-east-1.amazonaws.com/fitflow-subscription:latest
+    build: ./fitflow-subscription
+    tags:
+      - fitflow-subscription:latest
     ports:
       - "${SUBSCRIPTION_PORT}:${SUBSCRIPTION_PORT}"
     depends_on:
@@ -58,18 +53,3 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_SUBSCRIPTION_NAME}
-
-  subscription-database:
-    image: postgres
-    ports:
-      - "5434:${DB_PORT}"
-    volumes:
-      - "subscription-database:/var/lib/postgresql/data"
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
-      - POSTGRES_DB=${DB_SUBSCRIPTION_NAME}
-
-volumes:
-  signup-database:
-  subscription-database:
