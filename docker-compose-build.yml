@@ -9,6 +9,8 @@ services:
     depends_on:
       - signup
       - subscription
+      - signup-database
+      - subscription-database
     environment:
       - GW_PORT=${GW_PORT}
       - SIGNUP_HOST=${SIGNUP_HOST}
@@ -23,6 +25,8 @@ services:
         - fitflow-signup:latest
     ports:
       - "${SIGNUP_PORT}:${SIGNUP_PORT}"
+    depends_on:
+      - signup-database
     environment:
       - SIGNUP_HOST=${SIGNUP_HOST}
       - SIGNUP_PORT=${SIGNUP_PORT}
@@ -32,6 +36,17 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_SIGNUP_NAME}
 
+  signup-database:
+    image: postgres
+    ports:
+      - "5433:${DB_PORT}"
+    volumes:
+      - "signup-database:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_SIGNUP_NAME}
+
   subscription:
     build: 
       context: ./fitflow-subscription
@@ -39,6 +54,9 @@ services:
         - fitflow-subscription:latest
     ports:
       - "${SUBSCRIPTION_PORT}:${SUBSCRIPTION_PORT}"
+    depends_on:
+      - signup
+      - subscription-database
     environment:
       - SIGNUP_HOST=${SIGNUP_HOST}
       - SIGNUP_PORT=${SIGNUP_PORT}
@@ -49,3 +67,18 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_SUBSCRIPTION_NAME}
+  
+  subscription-database:
+    image: postgres
+    ports:
+      - "5434:${DB_PORT}"
+    volumes:
+      - "subscription-database:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_SUBSCRIPTION_NAME}
+
+volumes:
+  signup-database:
+  subscription-database:

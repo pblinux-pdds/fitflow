@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SubscriptionController } from './subscription/subscription.controller';
 import { SignupController } from './signup/signup.controller';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { SignupController } from './signup/signup.controller';
           port: process.env.SUBSCRIPTION_PORT ? parseInt(process.env.SUBSCRIPTION_PORT) : 3002,
         }
       }
-    ])
+    ]),
+    HealthModule
   ],
   controllers: [AppController, SubscriptionController, SignupController],
   providers: [AppService],
