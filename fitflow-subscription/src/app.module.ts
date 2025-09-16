@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { Subscription } from './subscription/entities/subscription.entity';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
@@ -17,6 +18,14 @@ import { Subscription } from './subscription/entities/subscription.entity';
       database: process.env.DB_NAME,
       entities: [Subscription],
       synchronize: true,
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: { target: 'pino-pretty' },
+        customProps: (_) => ({
+          service: 'fitflow-subscription'
+        })
+      }
     }),
   ],
   controllers: [AppController],

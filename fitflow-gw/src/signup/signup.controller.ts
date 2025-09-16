@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, Req } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
@@ -9,17 +9,17 @@ export class SignupController {
     ) {}
 
     @Post()
-    async createUser(@Body() data: { email: string, password: string, firstName: string, lastName: string }) {
-        return firstValueFrom(this.signupClient.send({ cmd: 'create_user' }, data));
+    async createUser(@Body() data: { email: string, password: string, firstName: string, lastName: string }, @Req() request) {
+        return firstValueFrom(this.signupClient.send({ cmd: 'create_user' }, { data, correlationId: request.id, }));
     }
 
     @Get()
-    async getUsers() {
-        return firstValueFrom(this.signupClient.send({ cmd: 'get_users' }, {}));
+    async getUsers(@Req() request) {
+        return firstValueFrom(this.signupClient.send({ cmd: 'get_users' }, { correlationId: request.id }));
     }
 
     @Get(':id')
-    async getUserById(@Param('id') id: string) {
-        return firstValueFrom(this.signupClient.send({ cmd: 'get_user_by_id' }, Number(id)));
+    async getUserById(@Param('id') id: string, @Req() request) {
+        return firstValueFrom(this.signupClient.send({ cmd: 'get_user_by_id' }, { id: Number(id), correlationId: request.id } ));
     }
 }

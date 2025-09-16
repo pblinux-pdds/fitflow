@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post, Req } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
@@ -9,7 +9,7 @@ export class SubscriptionController {
     ) {}
 
     @Post()
-    async createSubscription(@Body() data: { userId: number; plan: string }) {
-        return firstValueFrom(this.subscriptionClient.send({ cmd: 'create_subscription' }, data));
+    async createSubscription(@Body() data: { userId: number; plan: string }, @Req() request) {
+        return firstValueFrom(this.subscriptionClient.send({ cmd: 'create_subscription' }, { ...data, correlationId: request.id, }));
     }
 }
