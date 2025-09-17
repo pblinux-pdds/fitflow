@@ -14,6 +14,7 @@ services:
       - SIGNUP_PORT=${SIGNUP_PORT}
       - SUBSCRIPTION_HOST=${SUBSCRIPTION_HOST}
       - SUBSCRIPTION_PORT=${SUBSCRIPTION_PORT}
+      - JWT_SECRET=${JWT_SECRET}
 
   signup:
     image: 539759801100.dkr.ecr.us-east-1.amazonaws.com/fitflow-signup:latest
@@ -29,6 +30,7 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_SIGNUP_NAME}
+      - JWT_SECRET=${JWT_SECRET}
 
   signup-database:
     image: postgres

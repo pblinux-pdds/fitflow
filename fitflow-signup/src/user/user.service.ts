@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -12,9 +13,21 @@ export class UserService {
     @InjectPinoLogger(UserService.name) private readonly logger: PinoLogger,
   ) {}
 
-  create(createUserDto: CreateUserDto, correlationId?: string) {
+  async create(createUserDto: CreateUserDto, correlationId?: string) {
+    const hash = await bcrypt.hash(createUserDto.password, 10);
+    const user = this.repository.create({ ...createUserDto, password: hash });
+
     this.logger.info({ correlationId }, 'Creating new user');
-    return this.repository.save(createUserDto)
+    return this.repository.save(user);
+  }
+
+  async login(email: string, password: string, correlationId?: string) {
+    const user = await this.repository.findOneBy({ email });
+    if (!user) return null;
+    
+    const isMatch = await bcrypt.compare(password, user.password);
+    this.logger.info({ correlationId }, 'Login a user');
+    return isMatch ? user : null;
   }
 
   findAll(correlationId?: string) {

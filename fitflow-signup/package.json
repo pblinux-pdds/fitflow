@@ -22,10 +22,12 @@
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/microservices": "^11.1.6",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
+    "bcrypt": "^6.0.0",
     "class-validator": "^0.14.2",
     "nestjs-pino": "^4.4.0",
     "pg": "^8.16.3",

@@ -3,11 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SubscriptionController } from './subscription/subscription.controller';
-import { SignupController } from './signup/signup.controller';
+import { UserController } from './user/user.controller';
 import { HealthModule } from './health/health.module';
 import { LoggerModule } from 'nestjs-pino';
 import { v4 as uuid } from 'uuid';
 import { CorrelationMiddleware } from './correlation/correlation.middleware';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -39,9 +41,10 @@ import { CorrelationMiddleware } from './correlation/correlation.middleware';
         }
       },
     ]),
-    HealthModule
+    HealthModule,
+    AuthModule
   ],
-  controllers: [AppController, SubscriptionController, SignupController],
+  controllers: [AppController, SubscriptionController, UserController, AuthController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
