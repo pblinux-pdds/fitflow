@@ -25,7 +25,6 @@ export class AuthService {
 
         const payload = { sub: user.id, email: user.email };
         const token = await this.jwtService.signAsync(payload);
-        console.log(`[${correlationId}] Token generado: ${token}`);
         return { token };
     }
 }
